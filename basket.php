@@ -4,8 +4,9 @@
 	require "admin/includes/functions.php";
 	require "admin/includes/db.php";
 	error_reporting(0);
-	
-
+	$uname = $_SESSION['first_name'];
+	$res = $db->query("SELECT * FROM users WHERE username = '".$uname."'");
+	$user = $res->fetch_assoc();
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//       Section 1 (if user attempts to add something to the cart from the product page)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +148,7 @@
 			$i++; 
 		}
 		
-		$cartTotal = '<p class="p_total"><span>Basket Total</span> : #<span id="cart-total">'.$cartTotal.'</span></p>';
+		$cartTotal = '<p class="p_total"><span>Basket Total</span> : $<span id="cart-total">'.$cartTotal.'</span></p>';
 		
 	}
 	
@@ -164,8 +165,9 @@
 <meta name="keywords" content="" />
 
 <head>
-	
-<title>MFORS</title>
+<link rel="icon" type="image/png" href="image/favicon.ico">
+
+<title>Sweet-O-Clock</title>
 
 <link rel="stylesheet" href="css/main.css" />
 
@@ -225,15 +227,15 @@
 			<div class="left">
 				
 				<h3>LOCATION</h3>
-				<p>Montreal</p>
-				<p>Quebec</p>
+				<p>Montreal Canada</p>
+				
 				
 			</div>
 			
 			<div class="left">
 				
 				<h3>CONTACT</h3>
-				<p>15141232094</p>
+				<p>12345678</p>
 				<p>sweetoclock@gmail.com</p>
 				
 			</div>
@@ -258,7 +260,6 @@
 	
 	<div class="on_footer_parallax">
 		
-		<p>&copy; <?php echo strftime("%Y", time()); ?> <span>MyRestaurant</span>. All Rights Reserved</p>
 		
 	</div>
 	
@@ -281,7 +282,7 @@
 				<div class="form_group">
 					
 					<label>Name</label>
-					<input type="text" id="name" name="name" placeholder="Enter your full name" required>
+					<input type="text" id="name" name="name" value="<?php echo $user['username']?>" disabled>
 					
 				</div>
 				
@@ -295,7 +296,7 @@
 				<div class="form_group">
 					
 					<label>Email</label>
-					<input type="Email" id="email" name="email" placeholder="Enter your email" required>
+					<input type="Email" id="email" name="email" value="<?php echo $user['email'] ?>" disabled>
 					
 				</div>
 				
