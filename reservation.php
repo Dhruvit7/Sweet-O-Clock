@@ -1,9 +1,9 @@
 <?php 
 	
-	session_start();
+	
 	require "admin/includes/functions.php";
 	require "admin/includes/db.php";
-	
+	session_start();
 	$msg = "";
 	
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -70,21 +70,43 @@
 <meta name="keywords" content="" />
 
 <head>
-	
-<title>MFORS</title>
+<link rel="icon" type="image/png" href="image/favicon.ico">
+
+<title>Sweet-O-Clock</title>
 
 <link rel="stylesheet" href="css/main.css" />
 
 <script src="js/jquery.min.js" ></script>
 
 <script src="js/myscript.js"></script>
+<script>
+	$(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var maxDate = year + '-' + month + '-' + day;
+  
+    $('#date_pick').attr('min', maxDate);
+});
+</script>
 	
 </head>
 
 <body>
 	
 <?php require "includes/header.php"; ?>
-
+<?php
+	$uname = $_SESSION['first_name'];
+		$usermail = $db->query("SELECT email FROM users WHERE username = '".$uname."'");
+        $res = $usermail->fetch_assoc();
+?>
 <div class="parallax" onclick="remove_class()">
 	
 	<div class="parallax_head">
@@ -112,14 +134,14 @@
 				<div class="form_group">
 					 
 					 <label>No of Guest</label>
-					<input type="number" placeholder="How many guests" min="1" name="guest" id="guest" required>
+					<input type="number" min="1" placeholder="How many guests" min="1" name="guest" id="guest" required>
 					
 				</div>
 				
 				<div class="form_group">
 					
 					<label>Email</label>
-					<input type="email" name="email" placeholder="Enter your email" required>
+					<input type="email" name="email" value="<?php echo $res['email']?>">
 					
 				</div>
 				
@@ -133,14 +155,14 @@
 				<div class="form_group">
 					
 					<label>Date</label>
-					<input type="date" name="date_res" placeholder="Select date for booking" required>
+					<input type="date" name="date_res" id="date_pick" placeholder="Select date for booking" required>
 					
 				</div>
 				
 				<div class="form_group">
 					
 					<label>Time</label>
-					<input type="time" name="time" placeholder="Select time for booking" required>
+					<input type="time" name="time" max='11:00 PM' min='04:00 PM' id="time_pick" placeholder="Select time for booking" required>
 					
 				</div>
 				
@@ -155,12 +177,18 @@
 					<textarea name="suggestions" placeholder="your suggestions" required></textarea>
 					
 				</div>
-				
 				<div class="form_group">
 					
 					<input type="submit" class="submit" name="submit" value="MAKE YOUR BOOKING" />
 					
 				</div>
+				<div class="form_group">
+					
+					<a href="bookinglist.php" class="reserve">SEE YOUR BOOKINGS</a>
+					
+				</div>
+				
+				
 				
 			</div>
 			
@@ -214,7 +242,6 @@
 	
 	<div class="on_footer_parallax">
 		
-		<p>&copy; <?php echo strftime("%Y", time()); ?> <span>MyRestaurant</span>. All Rights Reserved</p>
 		
 	</div>
 	
