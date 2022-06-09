@@ -1,151 +1,204 @@
 <?php 
-	
-	session_start();
-	require "admin/includes/functions.php";
-	require "admin/includes/db.php";
-	
-	$get_recent = $db->query("SELECT * FROM food LIMIT 9");
-	
-	$result = "";
-	
-	if($get_recent->num_rows) {
-		
-		while($row = $get_recent->fetch_assoc()) {
-			
-			$result .= "<div class='parallax_item'>
-				
-							<a href='detail.php?fid=".$row['id']."'><img src='image/FoodPics/".$row['id'].".jpg' width='80px' height='80px' /> 
-							<div class='detail'>
-								
-								<h4>".$row['food_name']."</h4>
-								<p class='desc'>".substr($row['food_description'], 0, 33)."...</p>
-								<p class='price'>$".$row['food_price']."</p>
-								
-							</div>
-							<p class='clear'></p>
-							</a>
-							
-						</div>";
-			
-		}
-		
-	}else{
-		
-		
-		
-	}
-	
+	require_once("dbConnection.php");
+    $msg = "";
 ?>
-
-<!Doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<meta name="description" content="" />
-
-<meta name="keywords" content="" />
-
 <head>
-	
-<title>MFORS</title>
 
-<link rel="stylesheet" href="css/main.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<script src="js/jquery.min.js" ></script>
+    <link rel="icon" type="image/png" href="image/favicon.ico">
 
-<script src="js/myscript.js"></script>
+    <title>Sweet-O-Clock</title>
+    <!-- <link rel="icon" type="image/x-icon" href="./img/favicon.ico"> -->
 
-<style>
-    img[src*="https://cloud.githubusercontent.com/assets/23024110/20663010/9968df22-b55e-11e6-941d-edbc894c2b78.png"] {
-    display: none;}
-</style>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="css/loginregister.css" rel="stylesheet">
+
+    <script src="js/jquery.js"></script>
+
+    <script src="js/loginregister.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
-	
-<?php require "includes/header.php"; ?>
 
-<div class="parallax" onclick="remove_class()">
-	
-	<div class="parallax_head">
-		
-		<h2>Welcome</h2>
-		<h3>Eat what you love, love what you eat.</h3>
-		
-	</div>
-	
-</div>
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container-fluid">
+
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+
+                        <a class="navbar-brand" href="#">Sweet-O'Clock</a>
+                    </div>
+            </nav>
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a href="#" class="active" id="login-form-link">Login</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#" id="register-form-link">Register</a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="login-form" action="login.php" method="post" role="form" style="display: block;">
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="resetpwd.php" class="reset-pwd">Forget Password?</a>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="register-form" action="signup.php" method="post" role="form" style="display: none;">
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="firstname" id="firstname" tabindex="2" class="form-control" placeholder="First Name" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="lastname" id="lastname" tabindex="3" class="form-control" placeholder="Last Name" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="email" id="email" tabindex="4" class="form-control" placeholder="Email Address" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="dob" id="dob" tabindex="5" class="form-control" placeholder="Date of Birth" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="password" tabindex="6" class="form-control" placeholder="Password" required>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <input type="password" name="confirm-password" id="confirm-password" tabindex="7" class="form-control" placeholder="Confirm Password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="seq"> Choose Security Question(Keep It Safe and remember):</label>
+                                        <select class="form-control" name="seq">
+                                            <option selected="selected" value="0">What high school did you attend?</option>
+                                            <option value="1">What was your favorite food as a child?</option>
+                                            <option value="2">What is the name of your first school?</option>
+                                            <option value="3">What is your favorite movie?</option>
+                                            <option value="4">In what city or town did your parents meet?</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="sque" id="sque" tabindex="8" class="form-control" placeholder="Enter Your Answer" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorlog" style="visibility:hidden"></div>
+
+    <?php
+    if (isset($_GET['val'])) {
+        $errString;
+       
+        if($_GET['val'] == 5){
+            $errString = 'Username not entered';
+        } else if($_GET['val'] == 6){
+            $errString = 'Password not entered';
+        } else if($_GET['val'] == 7){
+            $errString = 'Username or password not correct!';
+        } else if($_GET['val'] == 8){
+            $errString = 'You have been blocked.';
+        } elseif($_GET['val'] == 9){
+            $errString = "Password reset successfully.";
+        }
+            echo "<script>
+                        $(function() {
+                            $('#errorlog').text('" . $errString . "').css('background-color','#e91e63').css('visibility','visible');
+                            $('#errorlog').delay(2000);
+                        });
+                     </script>";
+        }
+    
+        
+        else if(isset($_GET['valr'])){
+            $errString;
+            if ($_GET['valr'] == 1) {
+                $errString = 'Passwords do not match!';
+            } else if ($_GET['valr'] == 2) {
+                $errString = 'Missing inputs!';
+            } else if($_GET['valr'] == 4){
+                $errString = 'Username or email already exists!';
+            }else if($_GET['valr'] == 3){
+                $errString = 'Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.';
+            }
+
+            echo "<script>  
+                        $(function() {
+                            $('#errorlog').text('" . $errString . "').css('background-color','#e91e63').css('visibility','visible');
+                            $('#errorlog').delay(2000);
+                            $('#login-form').fadeOut(8);
+                            $('#register-form').fadeIn(10);
+                            $('#login-form-link').removeClass('active');
+                            $('#register-form-link').addClass('active');
+                        });
+                     </script>";
+        }
+
+        else if(isset($_GET['valre'])){
+         if($_GET['valre'] == "success") {
+            $errString = 'Registration successfull';
+            echo "<script>
+            $(function() {
+                $('#errorlog').text('" . $errString . "').css('background-color','#e91e63').css('visibility','visible');
+                $('#errorlog').delay(2000);
+            });
+         </script>";
+        }
+        }
 
 
-<div class="content remove_pad" onclick="remove_class()">
-	
-	<div class="inner_content on_parallax"><br>
-		
-		<h2><span class="fresh">Discover Fresh Menu</span></h2><br><br>
-		
-		<div class="parallax_content">
-			
-			<?php echo $result; ?>
-			
-			<p class="clear"></p>
-			
-		</div>
-		
-	</div>
-	
-</div>
 
-<div class="content" onclick="remove_class()">
-	
-	<div class="inner_content">
-		
-		<div class="contact">
-			
-			<!-- <div class="left">
-				
-				<h3>LOCATION</h3>
-				<p>Montreal</p>
-				<p>Quebec</p>
-				
-			</div>
-			
-			<div class="left">
-				
-				<h3>CONTACT</h3>
-				<p>15141232094</p>
-				<p>sweetoclock@gmail.com</p>
-				
-			</div>
-			 -->
-			<p class="left"></p>
-			
-			<div class="icon_holder">
-				
-				<a href="#"><img src="image/icons/Facebook.png" alt="image/icons/Facebook.png" /></a>
-				<a href="#"><img src="image/icons/Google+.png" alt="image/icons/Google+.png"  /></a>
-				<a href="#"><img src="image/icons/Twitter.png" alt="image/icons/Twitter.png"  /></a>
-				
-			</div>
-			
-		</div>
-		
-	</div>
-	
-</div>
 
-<div class="footer_parallax" onclick="remove_class()">
-	
-	<div class="on_footer_parallax">
-		
-		<p>&copy; <?php echo strftime("%Y", time()); ?> <span>MyRestaurant</span>. All Rights Reserved</p>
-		
-	</div>
-	
-</div>
-	
+    ?>
 </body>
+
 
 </html>
