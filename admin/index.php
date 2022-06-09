@@ -49,10 +49,10 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<!-- <link rel="icon" type="image/png" href="assets/img/favicon.ico"> -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
-	<title>Unique Restaurant</title>
+	<link rel="icon" type="image/png" href="/admin/image/favicon.ico">
+	<title>Sweet-O-Clock</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -79,8 +79,8 @@
 	
 </head>
 <body>
-
-<div class="login_wrapper">
+<?php require "includes/header.php"; ?>
+<div class="login_wrapper" >
 	
 	<div class="login_holder">
 			
